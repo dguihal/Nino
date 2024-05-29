@@ -1,6 +1,6 @@
 module github.com/dguihal/nino
 
-go 1.21.8
+go 1.21
 
 require (
 	github.com/Masterminds/semver/v3 v3.2.1
