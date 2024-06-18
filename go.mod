@@ -6,7 +6,7 @@ require (
 	github.com/Masterminds/semver/v3 v3.2.1
 	github.com/google/go-containerregistry v0.19.2
 	github.com/hashicorp/nomad/api v0.0.0-20240329144753-31f53cec0192
-	github.com/spf13/cobra v1.8.0
+	github.com/spf13/cobra v1.8.1
 )
 
 require (
