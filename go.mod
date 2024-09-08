@@ -3,15 +3,14 @@ module github.com/dguihal/nino
 go 1.21.11
 
 require (
-	github.com/Masterminds/semver/v3 v3.2.1
-	github.com/google/go-containerregistry v0.19.2
+	github.com/Masterminds/semver/v3 v3.3.0
+	github.com/google/go-containerregistry v0.20.2
 	github.com/hashicorp/nomad/api v0.0.0-20240329144753-31f53cec0192
 	github.com/spf13/cobra v1.8.1
 )
 
 require (
-	github.com/docker/cli v26.1.3+incompatible // indirect
-	github.com/docker/docker v26.1.3+incompatible // indirect
+	github.com/docker/cli v27.1.1+incompatible // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
