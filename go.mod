@@ -3,7 +3,7 @@ module github.com/dguihal/nino
 go 1.21.11
 
 require (
-	github.com/Masterminds/semver/v3 v3.2.1
+	github.com/Masterminds/semver/v3 v3.3.0
 	github.com/google/go-containerregistry v0.20.2
 	github.com/hashicorp/nomad/api v0.0.0-20240329144753-31f53cec0192
 	github.com/spf13/cobra v1.8.1
