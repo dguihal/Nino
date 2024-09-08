@@ -57,7 +57,7 @@ func CheckForNewVersion(dockerImage *DockerImage, ctx context.Context) {
 				// Needed to avoid vX.X.X and X.X.X shown independently (and having duplicate output)
 				if !alreadyFound {
 					found = append(found, *v)
-					slog.Info("Found value", "Path", dockerImage.Image, "Ref", refV.String(), "Tag", tag)
+					slog.Info("Found value", "Path", dockerImage.Image, "Ref", dockerImage.Version, "Tag", tag)
 				}
 			}
 
