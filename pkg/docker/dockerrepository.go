@@ -14,7 +14,7 @@ func CheckForNewVersion(dockerImage *DockerImage, ctx context.Context) {
 
 	var found []semver.Version
 
-	refV, err := semver.NewVersion(dockerImage.Version)
+	checkConstraint, err := semver.NewConstraint("> " + dockerImage.Version)
 	if err != nil {
 		slog.Error("Invalid docker version", "image", dockerImage.Image, "version", dockerImage.Version, "error", err)
 		os.Exit(1)
@@ -44,7 +44,7 @@ func CheckForNewVersion(dockerImage *DockerImage, ctx context.Context) {
 				continue
 			}
 
-			if v.GreaterThan(refV) {
+			if checkConstraint.Check(v) {
 				alreadyFound := false
 
 				for _, foundV := range found {
