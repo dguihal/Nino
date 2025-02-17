@@ -1,6 +1,7 @@
 module github.com/dguihal/nino
 
-go 1.21.11
+go 1.23.0
+
 toolchain go1.23.6
 
 require (
