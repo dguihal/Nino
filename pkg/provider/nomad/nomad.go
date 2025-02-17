@@ -25,7 +25,7 @@ func (p *NomadProvider) ListImages() []*docker.DockerImage {
 
 	client, err := api.NewClient(config)
 	if err != nil {
-		slog.Error("Error creating nomad client", err)
+		slog.Error("Error creating nomad client", slog.Any("error", err))
 		os.Exit(1)
 	}
 
@@ -48,7 +48,7 @@ func (p *NomadProvider) getDockerTasks(client *api.Client) []*api.Task {
 	jobs, _, err := client.Jobs().List(nil)
 
 	if err != nil {
-		slog.Error("Error getting list of nomad jobs", err)
+		slog.Error("Error getting list of nomad jobs", slog.Any("error", err))
 		os.Exit(1)
 	}
 
@@ -58,7 +58,7 @@ func (p *NomadProvider) getDockerTasks(client *api.Client) []*api.Task {
 		jobinfos, _, err := client.Jobs().Info(jobs[index].ID, nil)
 
 		if err != nil {
-			slog.Error("Error getting job Info", err)
+			slog.Error("Error getting job Info", slog.Any("error", err))
 			os.Exit(1)
 		}
 

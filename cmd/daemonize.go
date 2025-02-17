@@ -72,7 +72,7 @@ func daemonizeEntrypoint(cmd *cobra.Command, args []string) {
 	checkInterval = viper.GetInt32("interval")
 
 	if err := daemonRun(ctx); err != nil {
-		slog.Error("Runtime failure", "error", err)
+		slog.Error("Runtime failure", slog.Any("error", err))
 		os.Exit(1)
 	}
 }
