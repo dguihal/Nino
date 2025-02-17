@@ -16,19 +16,19 @@ func CheckForNewVersion(dockerImage *DockerImage, ctx context.Context) {
 
 	checkConstraint, err := semver.NewConstraint("> " + dockerImage.Version)
 	if err != nil {
-		slog.Error("Invalid docker version", "image", dockerImage.Image, "version", dockerImage.Version, "error", err)
+		slog.Error("Invalid docker version", "image", dockerImage.Image, "version", dockerImage.Version, slog.Any("error", err))
 		os.Exit(1)
 	}
 
 	repo, err := name.NewRepository(dockerImage.Image)
 	if err != nil {
-		slog.Error("Error building repository object", "repo", dockerImage.Image, "error", err)
+		slog.Error("Error building repository object", "repo", dockerImage.Image, slog.Any("error", err))
 		os.Exit(1)
 	}
 
 	puller, err := remote.NewPuller()
 	if err != nil {
-		slog.Error("Error creating puller", err)
+		slog.Error("Error creating puller", slog.Any("error", err))
 		os.Exit(1)
 	}
 
