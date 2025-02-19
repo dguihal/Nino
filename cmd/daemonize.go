@@ -1,18 +1,23 @@
 /*
 Copyright © 2024 NAME HERE <EMAIL ADDRESS>
 */
+// https://ieftimov.com/posts/four-steps-daemonize-your-golang-programs/
+
 package cmd
 
 import (
 	"context"
 	"fmt"
+	"log"
 	"log/slog"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
 	"github.com/dguihal/nino/pkg/nino"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -39,6 +44,12 @@ func init() {
 
 func daemonizeEntrypoint(cmd *cobra.Command, args []string) {
 	ctx, cancel := context.WithCancel(cmd.Context())
+
+	go func() {
+		http.Handle("/metrics", promhttp.Handler())
+		slog.Info("Prometeus compatible metrics available on 'http://:2112/metrics'")
+		log.Fatal(http.ListenAndServe(":2112", nil))
+	}()
 
 	signalChan := make(chan os.Signal, 1)
 	signal.Notify(signalChan, os.Interrupt, syscall.SIGHUP)
@@ -79,7 +90,11 @@ func daemonizeEntrypoint(cmd *cobra.Command, args []string) {
 
 func daemonRun(ctx context.Context) error {
 
+	//	slog.Info("Launching an initial check")
+	//	nino.Check(ctx)
+
 	ticker := time.NewTicker(time.Duration(checkInterval) * time.Second)
+	defer ticker.Stop()
 	slog.Info(fmt.Sprintf("Main loop started, check interval defined to %d seconds", checkInterval))
 
 	for {
@@ -87,8 +102,13 @@ func daemonRun(ctx context.Context) error {
 		case <-ctx.Done():
 			return nil
 		case <-ticker.C:
+			slog.Info("###############################################################")
+			slog.Info(fmt.Sprintf("Current date and time is: %s", time.Now().String()))
+			slog.Info("####################################################################")
+			ticker.Stop()
 			slog.Info("Launching a new check")
 			nino.Check(ctx)
+			ticker.Reset(time.Duration(checkInterval) * time.Second)
 		}
 	}
 }
