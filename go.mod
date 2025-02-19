@@ -8,7 +8,7 @@ require (
 	github.com/Masterminds/semver/v3 v3.3.1
 	github.com/google/go-containerregistry v0.20.3
 	github.com/hashicorp/nomad/api v0.0.0-20240329144753-31f53cec0192
-	github.com/spf13/cobra v1.8.1
+	github.com/spf13/cobra v1.9.1
 )
 
 require (
@@ -47,7 +47,7 @@ require (
 	github.com/opencontainers/image-spec v1.1.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
-	github.com/spf13/pflag v1.0.5 // indirect
+	github.com/spf13/pflag v1.0.6 // indirect
 	github.com/spf13/viper v1.19.0
 	github.com/vbatts/tar-split v0.11.6 // indirect
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9 // indirect
