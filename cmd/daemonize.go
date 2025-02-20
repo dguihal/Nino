@@ -1,8 +1,3 @@
-/*
-Copyright © 2024 NAME HERE <EMAIL ADDRESS>
-*/
-// https://ieftimov.com/posts/four-steps-daemonize-your-golang-programs/
-
 package cmd
 
 import (
@@ -22,6 +17,8 @@ import (
 	"github.com/spf13/viper"
 )
 
+// https://ieftimov.com/posts/four-steps-daemonize-your-golang-programs/
+
 // checkCmd represents the check command
 var daemonizeCmd = &cobra.Command{
 	Use:   "daemonize",
@@ -38,8 +35,15 @@ func init() {
 	rootCmd.AddCommand(daemonizeCmd)
 	daemonizeCmd.PersistentFlags().Int32P("interval", "i", 3600, "Check interval in seconds")
 
-	viper.BindPFlag("interval", daemonizeCmd.PersistentFlags().Lookup("interval"))
-	viper.BindEnv("interval", "interval")
+	if err := viper.BindPFlag("interval", daemonizeCmd.PersistentFlags().Lookup("interval")); err != nil {
+		slog.Error("Runtime failure", slog.Any("error", err))
+		os.Exit(1)
+	}
+
+	if err := viper.BindEnv("interval", "interval"); err != nil {
+		slog.Error("Runtime failure", slog.Any("error", err))
+		os.Exit(1)
+	}
 }
 
 func daemonizeEntrypoint(cmd *cobra.Command, args []string) {
