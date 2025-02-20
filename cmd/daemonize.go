@@ -3,7 +3,6 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"log"
 	"log/slog"
 	"net/http"
 	"os"
@@ -50,9 +49,19 @@ func daemonizeEntrypoint(cmd *cobra.Command, args []string) {
 	ctx, cancel := context.WithCancel(cmd.Context())
 
 	go func() {
+		server := &http.Server{
+			Addr:         ":2112",
+			ReadTimeout:  10 * time.Second,
+			WriteTimeout: 10 * time.Second,
+		}
+
 		http.Handle("/metrics", promhttp.Handler())
 		slog.Info("Prometeus compatible metrics available on 'http://:2112/metrics'")
-		log.Fatal(http.ListenAndServe(":2112", nil))
+
+		if err := server.ListenAndServe(); err != nil {
+			slog.Error("Runtime failure", slog.Any("error", err))
+			os.Exit(1)
+		}
 	}()
 
 	signalChan := make(chan os.Signal, 1)
@@ -69,7 +78,7 @@ func daemonizeEntrypoint(cmd *cobra.Command, args []string) {
 			case s := <-signalChan:
 				switch s {
 				case syscall.SIGHUP:
-					//Handle SIGGUP (reload) here
+					// Handle SIGGUP (reload) here
 					return
 				case os.Interrupt:
 					slog.Info("Interrupt received, terminating")
@@ -83,7 +92,7 @@ func daemonizeEntrypoint(cmd *cobra.Command, args []string) {
 		}
 	}()
 
-	//Initialize from vars
+	// Initialize from vars
 	checkInterval = viper.GetInt32("interval")
 
 	if err := daemonRun(ctx); err != nil {
